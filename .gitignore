@@ -21,3 +21,10 @@ project/plugins/project/
 .idea
 .credentials
 .gpgCredentials
+.metals
+.bloop
+.vscode
+.project/metals
+project/metals.sbt
+project/project/metals.sbt
+project/project/project/metals.sbt

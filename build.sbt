@@ -1,15 +1,16 @@
+val scala211Version = "2.11.12"
 val scala212Version = "2.12.10"
 val scala213Version = "2.13.1"
-val akkaVersion     = "2.6.6"
+val akkaVersion     = "2.5.21"
 
 lazy val root = (project in file("."))
   .settings(
     name := "akka-cluster-custom-downing",
-    organization := "org.sisioh",
-    organizationHomepage := Some(url("https://github.com/sisioh")),
-    sonatypeProfileName := "org.sisioh",
-    scalaVersion := scala213Version,
-    crossScalaVersions := scala212Version :: scala213Version :: Nil,
+    organization := "im.diyalog",
+    organizationHomepage := Some(url("https://github.com/diyalog-im")),
+    sonatypeProfileName := "im.diyalog",
+    scalaVersion := scala211Version,
+    crossScalaVersions := scala212Version :: scala213Version :: scala211Version :: Nil,
     scalacOptions ++=
       Seq(
         "-feature",
@@ -85,12 +86,24 @@ lazy val root = (project in file("."))
           url = url("https://blog.j5ik2o.me")
         )
       ),
-    publishTo := sonatypePublishToBundle.value,
+    //publishTo := sonatypePublishToBundle.value,
+    publishTo := {
+      val nexus = "http://mavenrepo.diyalog.im:18081"
+      if (isSnapshot.value)
+        Some("releases"  at nexus + "/repository/maven-snapshots/")
+      else
+        Some("snapshots" at nexus + "/repository/maven-releases/")
+    },
+
+    credentials += Credentials(Path.userHome / ".m2" / ".credentials")
+
+    /*
     credentials := {
       val ivyCredentials = (baseDirectory in LocalRootProject).value / ".credentials"
       val gpgCredentials = (baseDirectory in LocalRootProject).value / ".gpgCredentials"
       Credentials(ivyCredentials) :: Credentials(gpgCredentials) :: Nil
     }
+    */
   )
   .configs(MultiJvm)
   .enablePlugins(MultiJvmPlugin, ReleasePlugin)
